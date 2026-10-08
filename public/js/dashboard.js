@@ -31,7 +31,7 @@ async function loadAndRenderDashboardData() {
 }
 
 /**
- * Render Top Summary Metrics Bar
+ * Render Top Summary Metrics Bar (Excludes completed trips from Total Budget & Total Pending)
  */
 function renderDashboardStats(trips) {
   const totalTrips = trips.length;
@@ -41,9 +41,17 @@ function renderDashboardStats(trips) {
 
   trips.forEach(trip => {
     const summary = calculateTripSummary(trip);
-    totalBudgetSum += summary.totalBudget;
+    const statusObj = getTripStatus(trip.startDate, trip.endDate);
+    const isCompleted = statusObj.label === 'Completed';
+
+    // Total Collected accumulates across all trips
     totalCollectedSum += summary.totalPaid;
-    totalPendingSum += summary.totalPending;
+
+    // Only count Total Budget and Total Pending for active/upcoming/ongoing trips
+    if (!isCompleted) {
+      totalBudgetSum += summary.totalBudget;
+      totalPendingSum += summary.totalPending;
+    }
   });
 
   const totalTripsEl = document.getElementById('total-trips-count');
