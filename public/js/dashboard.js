@@ -169,19 +169,21 @@ function renderTripCardHtml(trip) {
     <div class="trip-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-xl transition-all duration-300">
       <div>
         <!-- Card Image & Status Badge -->
-        <div class="relative aspect-video w-full overflow-hidden bg-slate-900">
-          <img src="${escapeHtml(thumbnailSrc)}" alt="${escapeHtml(trip.name)}" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105 opacity-90" onerror="this.src='${getDefaultThumbnail(trip.name)}'">
+        <a href="trip-details.html?id=${trip.id}" class="block relative aspect-video w-full overflow-hidden bg-slate-900 group">
+          <img src="${escapeHtml(thumbnailSrc)}" alt="${escapeHtml(trip.name)}" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 opacity-90" onerror="this.src='${getDefaultThumbnail(trip.name)}'">
           <div class="absolute top-3 right-3">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-md ${status.badgeClass}">
               ${status.label}
             </span>
           </div>
-        </div>
+        </a>
 
         <!-- Card Body -->
         <div class="p-6 space-y-4">
           <div>
-            <h3 class="text-lg font-extrabold text-slate-900 line-clamp-1 tracking-tight">${escapeHtml(trip.name)}</h3>
+            <a href="trip-details.html?id=${trip.id}" class="group">
+              <h3 class="text-lg font-extrabold text-slate-900 line-clamp-1 tracking-tight group-hover:text-indigo-600 transition-colors">${escapeHtml(trip.name)}</h3>
+            </a>
             <p class="text-xs font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
               <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
               <span>${formatDateRange(trip.startDate, trip.endDate)}</span>
