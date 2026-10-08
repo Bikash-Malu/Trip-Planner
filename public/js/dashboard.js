@@ -31,25 +31,24 @@ async function loadAndRenderDashboardData() {
 }
 
 /**
- * Render Top Summary Metrics Bar (Excludes completed trips from Total Budget & Total Pending)
+ * Render Top Summary Metrics Bar (Excludes completed trips from top 4 cards)
  */
 function renderDashboardStats(trips) {
-  const totalTrips = trips.length;
+  let activeTripsCount = 0;
   let totalBudgetSum = 0;
   let totalCollectedSum = 0;
   let totalPendingSum = 0;
 
   trips.forEach(trip => {
-    const summary = calculateTripSummary(trip);
     const statusObj = getTripStatus(trip.startDate, trip.endDate);
     const isCompleted = statusObj.label === 'Completed';
 
-    // Total Collected accumulates across all trips
-    totalCollectedSum += summary.totalPaid;
-
-    // Only count Total Budget and Total Pending for active/upcoming/ongoing trips
+    // Exclude completed trips from the 4 top metric cards
     if (!isCompleted) {
+      activeTripsCount++;
+      const summary = calculateTripSummary(trip);
       totalBudgetSum += summary.totalBudget;
+      totalCollectedSum += summary.totalPaid;
       totalPendingSum += summary.totalPending;
     }
   });
@@ -59,7 +58,7 @@ function renderDashboardStats(trips) {
   const totalCollectedEl = document.getElementById('total-collected-sum');
   const totalPendingEl = document.getElementById('total-pending-sum');
 
-  if (totalTripsEl) totalTripsEl.textContent = totalTrips;
+  if (totalTripsEl) totalTripsEl.textContent = activeTripsCount;
   if (totalBudgetEl) totalBudgetEl.textContent = formatCurrency(totalBudgetSum);
   if (totalCollectedEl) totalCollectedEl.textContent = formatCurrency(totalCollectedSum);
   if (totalPendingEl) totalPendingEl.textContent = formatCurrency(totalPendingSum);
