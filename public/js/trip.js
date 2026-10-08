@@ -457,6 +457,9 @@ function renderTripDetailsUI(trip) {
 /**
  * Render Payment Table (Desktop Table + Mobile Cards with Progress Bars)
  */
+/**
+ * Render Payment Table (Desktop Table + Mobile Cards with High-Contrast Typography)
+ */
 function renderPaymentTable(trip) {
   const tbody = document.getElementById('payment-table-tbody');
   const mobileContainer = document.getElementById('payment-cards-mobile');
@@ -465,60 +468,62 @@ function renderPaymentTable(trip) {
   let rowsHtml = '';
   let cardsHtml = '';
 
-  (trip.people || []).forEach((person) => {
+  (trip.people || []).forEach((person, index) => {
     const paid = parseFloat(person.paid) || 0;
     const pending = calculatePending(equalShare, paid);
     const statusObj = calculatePaymentStatus(paid, equalShare);
     const personPercent = equalShare > 0 ? Math.min(100, Math.round((paid / equalShare) * 100)) : 0;
 
     const paidInputOrTextDesktop = isAdmin() ? `
-      <div class="relative max-w-[140px]">
-        <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400 font-semibold pointer-events-none">₹</span>
-        <input type="number" step="any" min="0" max="${equalShare}" data-person-id="${person.id}" class="paid-amount-input w-full pl-7 pr-2 py-1.5 text-sm font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" value="${paid}">
+      <div class="relative max-w-[150px]">
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-slate-500 font-bold pointer-events-none">₹</span>
+        <input type="number" step="any" min="0" max="${equalShare}" data-person-id="${person.id}" class="paid-amount-input w-full pl-7 pr-3 py-2 text-sm font-extrabold bg-white border border-slate-300 rounded-xl text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition-all" value="${paid}">
       </div>
     ` : `
-      <span class="font-bold text-slate-800 dark:text-slate-200">${formatCurrency(paid)}</span>
+      <span class="font-extrabold text-slate-900 text-sm">${formatCurrency(paid)}</span>
     `;
 
     const paidInputOrTextMobile = isAdmin() ? `
       <div class="relative w-full">
-        <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-xs text-slate-400 font-semibold pointer-events-none">₹</span>
-        <input type="number" step="any" min="0" max="${equalShare}" data-person-id="${person.id}" class="paid-amount-input w-full pl-5 pr-1.5 py-1 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" value="${paid}">
+        <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-500 font-bold pointer-events-none">₹</span>
+        <input type="number" step="any" min="0" max="${equalShare}" data-person-id="${person.id}" class="paid-amount-input w-full pl-6 pr-2 py-1.5 text-xs font-extrabold bg-white border border-slate-300 rounded-lg text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600" value="${paid}">
       </div>
     ` : `
-      <span class="font-bold text-slate-800 dark:text-slate-200">${formatCurrency(paid)}</span>
+      <span class="font-extrabold text-slate-900 text-xs">${formatCurrency(paid)}</span>
     `;
+
+    const rowBg = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
 
     // 1. Desktop Table Row
     rowsHtml += `
-      <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors border-b border-slate-100 dark:border-slate-800" data-person-id="${person.id}">
-        <td class="px-6 py-4 font-semibold text-slate-800 dark:text-white">
+      <tr class="${rowBg} hover:bg-indigo-50/50 transition-colors border-b border-slate-200/80" data-person-id="${person.id}">
+        <td class="px-6 py-4 font-bold text-slate-900">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-black text-xs flex items-center justify-center shadow-sm">
               ${escapeHtml(person.name.substring(0, 2).toUpperCase())}
             </div>
-            <span>${escapeHtml(person.name)}</span>
+            <span class="text-sm font-extrabold text-slate-900">${escapeHtml(person.name)}</span>
           </div>
         </td>
-        <td class="px-6 py-4 font-medium text-slate-600 dark:text-slate-400">
+        <td class="px-6 py-4 font-bold text-slate-800 text-sm">
           ${formatCurrency(equalShare)}
         </td>
         <td class="px-6 py-4">
           ${paidInputOrTextDesktop}
         </td>
-        <td class="px-6 py-4 font-bold text-slate-700 dark:text-slate-300 pending-cell">
+        <td class="px-6 py-4 font-black text-amber-700 text-sm pending-cell">
           ${formatCurrency(pending)}
         </td>
         <td class="px-6 py-4">
           <div class="flex flex-col gap-1.5 min-w-[150px]">
             <div class="flex items-center justify-between gap-2">
-              <span class="status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${statusObj.badgeClass}">
+              <span class="status-badge inline-flex items-center px-3 py-0.5 rounded-full text-xs ${statusObj.badgeClass}">
                 ${statusObj.status}
               </span>
-              <span class="person-progress-text text-xs font-extrabold text-slate-600 dark:text-slate-400">${personPercent}%</span>
+              <span class="person-progress-text text-xs font-black text-slate-700">${personPercent}%</span>
             </div>
-            <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-              <div class="person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700')}" style="width: ${personPercent}%"></div>
+            <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+              <div class="person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300')}" style="width: ${personPercent}%"></div>
             </div>
           </div>
         </td>
@@ -527,33 +532,33 @@ function renderPaymentTable(trip) {
 
     // 2. Mobile Participant Card
     cardsHtml += `
-      <div class="person-payment-card bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/80 space-y-3" data-person-id="${person.id}">
+      <div class="person-payment-card bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3" data-person-id="${person.id}">
         <div class="flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5 font-bold text-slate-800 dark:text-white">
-            <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center">
+          <div class="flex items-center gap-2.5 font-bold text-slate-900">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-black text-xs flex items-center justify-center">
               ${escapeHtml(person.name.substring(0, 2).toUpperCase())}
             </div>
-            <span class="text-sm">${escapeHtml(person.name)}</span>
+            <span class="text-sm font-extrabold">${escapeHtml(person.name)}</span>
           </div>
-          <span class="status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${statusObj.badgeClass}">
+          <span class="status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs ${statusObj.badgeClass}">
             ${statusObj.status}
           </span>
         </div>
 
         <div class="space-y-1">
           <div class="flex justify-between text-xs font-bold">
-            <span class="text-slate-500 dark:text-slate-400">Payment Progress</span>
-            <span class="person-progress-text text-indigo-600 dark:text-indigo-400">${personPercent}%</span>
+            <span class="text-slate-500">Payment Progress</span>
+            <span class="person-progress-text text-indigo-600 font-extrabold">${personPercent}%</span>
           </div>
-          <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-            <div class="person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600')}" style="width: ${personPercent}%"></div>
+          <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+            <div class="person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300')}" style="width: ${personPercent}%"></div>
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200/80 dark:border-slate-700/80 text-xs items-center">
+        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-xs items-center">
           <div>
             <span class="text-[10px] uppercase font-bold text-slate-400 block">Equal Share</span>
-            <span class="font-bold text-slate-700 dark:text-slate-300">${formatCurrency(equalShare)}</span>
+            <span class="font-extrabold text-slate-800">${formatCurrency(equalShare)}</span>
           </div>
           <div>
             <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Paid</span>
@@ -561,7 +566,7 @@ function renderPaymentTable(trip) {
           </div>
           <div>
             <span class="text-[10px] uppercase font-bold text-slate-400 block">Pending</span>
-            <span class="font-bold text-slate-800 dark:text-white pending-cell">${formatCurrency(pending)}</span>
+            <span class="font-black text-amber-700 pending-cell">${formatCurrency(pending)}</span>
           </div>
         </div>
       </div>
@@ -581,7 +586,7 @@ function renderPaymentTable(trip) {
         const paidVal = parseFloat(e.target.value) || 0;
         try {
           await API.updatePayment(trip.id, personId, paidVal);
-          showToast('Payment updated and saved to data.json', 'success');
+          showToast('Payment updated and saved successfully', 'success');
         } catch (err) {
           showToast('Failed to update payment on server', 'error');
         }
@@ -631,14 +636,14 @@ function handlePaidInputChange(inputEl, trip) {
     if (pendingCell) pendingCell.textContent = formatCurrency(pending);
     if (statusBadge) {
       statusBadge.textContent = statusObj.status;
-      statusBadge.className = `status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${statusObj.badgeClass}`;
+      statusBadge.className = `status-badge inline-flex items-center px-3 py-0.5 rounded-full text-xs ${statusObj.badgeClass}`;
     }
     if (personProgressText) {
       personProgressText.textContent = `${personPercent}%`;
     }
     if (personProgressBar) {
       personProgressBar.style.width = `${personPercent}%`;
-      personProgressBar.className = `person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700')}`;
+      personProgressBar.className = `person-progress-bar h-full transition-all duration-300 rounded-full ${personPercent === 100 ? 'bg-emerald-500' : (personPercent > 0 ? 'bg-amber-500' : 'bg-slate-300')}`;
     }
   });
 
@@ -660,7 +665,7 @@ function handlePaidInputChange(inputEl, trip) {
 function confirmResetPayments(tripId) {
   showModal({
     title: 'Reset Payments?',
-    message: 'Reset all payment information for this trip? This will set everyone\'s paid amount to ₹0 in data.json.',
+    message: 'Are you sure you want to reset all payment records for this trip to ₹0?',
     confirmText: 'Reset Payments',
     cancelText: 'Cancel',
     confirmClass: 'bg-red-600 hover:bg-red-700 text-white',

@@ -31,7 +31,7 @@ function calculatePending(equalShare, paidAmount) {
 }
 
 /**
- * Determine payment status for a person
+ * Determine payment status for a person with crisp high-contrast badges
  */
 function calculatePaymentStatus(paidAmount, equalShare) {
   const paid = parseFloat(paidAmount) || 0;
@@ -40,24 +40,24 @@ function calculatePaymentStatus(paidAmount, equalShare) {
   if (share <= 0) {
     return {
       status: 'Pending',
-      badgeClass: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border border-red-200 dark:border-red-800'
+      badgeClass: 'bg-rose-50 text-rose-700 border border-rose-200/80 font-extrabold'
     };
   }
 
   if (paid >= share) {
     return {
       status: 'Paid',
-      badgeClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+      badgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-extrabold'
     };
   } else if (paid > 0 && paid < share) {
     return {
       status: 'Partial',
-      badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-700/50'
+      badgeClass: 'bg-amber-50 text-amber-700 border border-amber-200/80 font-extrabold'
     };
   } else {
     return {
       status: 'Pending',
-      badgeClass: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border border-red-200 dark:border-red-800'
+      badgeClass: 'bg-rose-50 text-rose-700 border border-rose-200/80 font-extrabold'
     };
   }
 }
@@ -73,7 +73,8 @@ function calculateTripSummary(trip) {
       equalShare: 0,
       totalPaid: 0,
       totalPending: 0,
-      progressPercent: 0
+      progressPercent: 0,
+      isFullyPaid: false
     };
   }
 
@@ -101,6 +102,7 @@ function calculateTripSummary(trip) {
     equalShare,
     totalPaid,
     totalPending,
-    progressPercent
+    progressPercent,
+    isFullyPaid: progressPercent === 100
   };
 }

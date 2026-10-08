@@ -1,8 +1,14 @@
 /* Custom Styles for Trip Planner */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color-scheme: light;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
 /* Glassmorphism & Card Utilities */
@@ -11,6 +17,42 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Table High-Contrast Overrides */
+#payment-table-tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.15s ease-in-out;
+}
+
+#payment-table-tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+#payment-table-tbody tr:hover {
+  background-color: #eef2ff !important;
+}
+
+/* Paid Input Box Styling */
+.paid-amount-input {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.paid-amount-input:focus {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2) !important;
+  background-color: #ffffff !important;
+}
+
+/* Status Badges */
+.status-badge {
+  font-weight: 800 !important;
+  letter-spacing: 0.025em;
+  padding: 0.25rem 0.75rem;
 }
 
 /* Toast Container & Animations */
