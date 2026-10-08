@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Details - Trip Planner & Bill Generator</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header Navigation -->
+  <header class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo -->
+        <a href="dashboard.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V11a2 2 0 012-2h1.055M11 20.055V18a2 2 0 012-2h2.343M11 20.055A9.97 9.97 0 0112 20c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">TripPlanner</h1>
+            <p class="text-xs font-medium text-slate-500">Bill & Headcount Splitter</p>
+          </div>
+        </a>
+
+        <!-- User Controls -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-100/80 rounded-xl border border-slate-200">
+            <span class="user-name-display text-xs font-bold text-slate-800">User</span>
+            <span class="user-role-badge">Role</span>
+          </div>
+
+          <div id="header-auth-action"></div>
+
+          <a href="dashboard.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span>Dashboard</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+    
+    <!-- Hero Banner Card -->
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+      <div class="relative h-48 sm:h-64 md:h-72 w-full bg-slate-900">
+        <img id="details-trip-thumbnail" src="" alt="Trip Image" class="w-full h-full object-cover object-center opacity-85">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+        
+        <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 text-white">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span id="details-trip-status" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md">Status</span>
+              <span id="details-trip-date" class="text-xs font-medium text-slate-200 bg-slate-900/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">Dates</span>
+            </div>
+            <h2 id="details-trip-title" class="text-2xl sm:text-4xl font-black tracking-tight text-white drop-shadow-md">Trip Name</h2>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <a id="details-edit-link" href="#" class="hidden items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs sm:text-sm font-bold border border-white/20 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              <span>Edit Trip</span>
+            </a>
+            <button type="button" id="btn-reset-payments" class="hidden items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/30 hover:bg-red-500/50 backdrop-blur-md text-red-100 text-xs sm:text-sm font-bold border border-red-300/30 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Reset All Payments</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Metrics Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Budget</span>
+        <div id="details-total-budget" class="text-xl sm:text-2xl font-black text-slate-900 mt-1">₹0</div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Headcount</span>
+        <div id="details-total-people" class="text-xl sm:text-2xl font-black text-slate-900 mt-1">0</div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Equal Share</span>
+        <div id="details-per-person" class="text-xl sm:text-2xl font-black text-indigo-600 mt-1">₹0</div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600">Total Paid</span>
+        <div id="details-total-paid" class="text-xl sm:text-2xl font-black text-emerald-600 mt-1">₹0</div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm col-span-2 md:col-span-1">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600">Total Pending</span>
+        <div id="details-total-pending" class="text-xl sm:text-2xl font-black text-amber-600 mt-1">₹0</div>
+      </div>
+
+    </div>
+
+    <!-- Overall Payment Progress Bar Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-2">
+      <div class="flex items-center justify-between text-xs font-extrabold">
+        <span class="uppercase tracking-wider text-slate-600">Overall Trip Funding Progress</span>
+        <span id="details-progress-text" class="text-indigo-600">0% Paid</span>
+      </div>
+      <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+        <div id="details-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-500 rounded-full" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Payment Breakdown Section -->
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+      
+      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Headcount Payment Status Breakdown</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Admin can edit paid amounts inline. Data persists live to <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">data/data.json</code>.</p>
+        </div>
+      </div>
+
+      <!-- Desktop View Table (Visible on md and larger) -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-extrabold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <th class="px-6 py-3.5">Participant Name</th>
+              <th class="px-6 py-3.5">Equal Share</th>
+              <th class="px-6 py-3.5">Amount Paid</th>
+              <th class="px-6 py-3.5">Pending Balance</th>
+              <th class="px-6 py-3.5">Status & Progress</th>
+            </tr>
+          </thead>
+          <tbody id="payment-table-tbody">
+            <!-- Rendered by payment.js / trip.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile View Participant Cards (Visible on screens < md) -->
+      <div id="payment-cards-mobile" class="block md:hidden p-4 space-y-4">
+        <!-- Rendered by trip.js -->
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-6 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
+    <p>Trip Planner SaaS &bull; Node.js REST API & Local <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">data/data.json</code> Storage</p>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Client Application Scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/trip.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

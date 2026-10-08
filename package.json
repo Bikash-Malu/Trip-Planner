@@ -1,0 +1,14 @@
+{
+  "name": "trip-planner",
+  "version": "1.0.0",
+  "description": "Full-stack Trip Planner web application with Node.js and JSON data persistence",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.3"
+  }
+}
